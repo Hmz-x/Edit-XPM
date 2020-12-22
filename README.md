@@ -1,5 +1,6 @@
 # Edit-XPM
-Edit XPM files via CLI. Uses no GUI, designed to for allowing use within scripts/programs.
+Edit XPM files via CLI. Uses no GUI, designed for 
+using within scripts/programs or just from a shell.
 
 Compiling and Execution Instructions:
 lex cli_arg_lexer.l
