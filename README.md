@@ -2,7 +2,12 @@
 Edit XPM files via CLI. Uses no GUI, designed for 
 using within scripts/programs or just from a shell.
 
-Compiling and Execution Instructions:
-lex cli_arg_lexer.l
-gcc lex.yy.c edit_xpm.c -o ed-xpm
-./ed-xpm --inv=100 <xpm_file>
+## Compiling
+
+Using the make build tool you can easily compile the project by typing:
+
+    $ make
+
+## Usage
+
+    $ ./ed-xpm --inv=100 <xpm_file>

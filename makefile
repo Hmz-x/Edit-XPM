@@ -17,7 +17,7 @@ LIBRARIES=
 OBJECTS=$(SOURCES:.c=.o)
 
 # set the name of the resulting executable here
-EXEC=edit_xpm
+EXEC=ed-xpm
 
 # the all-target will be called by default when executing make without arguments.
 # List the dependencies which should trigger a re-compilation when any changes occured.
