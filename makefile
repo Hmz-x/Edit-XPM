@@ -6,7 +6,10 @@ CXX_FLAGS=-c -Wall -o
 CXX_LFLAGS=-o
 
 # declare all source files here
-SOURCES=lex.yy.c edit_xpm.c
+SOURCES=edit_xpm.c
+LEX_FILES=lex.yy.l
+LEXED_FILES=$(LEX_FILES:.l=.c)
+SOURCES += $(LEXED_FILES)
 # list all required libraries here
 LIBRARIES=
 
@@ -14,7 +17,7 @@ LIBRARIES=
 OBJECTS=$(SOURCES:.c=.o)
 
 # set the name of the resulting executable here
-EXEC=test
+EXEC=edit_xpm
 
 # the all-target will be called by default when executing make without arguments.
 # List the dependencies which should trigger a re-compilation when any changes occured.
@@ -22,7 +25,7 @@ all: $(SOURCES) $(EXEC)
 
 # link all the object files and libraries together
 $(EXEC): $(OBJECTS)
-	$(CXX) $(CXX_LFLAGS) $@ $< $(addprefix -l,$(LIBRARIES))
+	$(CXX) $(CXX_LFLAGS) $@ $^ $(addprefix -l,$(LIBRARIES))
 
 # this rule creates object files from all the source files. Note the %-symbol as a placeholder for the filename
 %.o: %.c
@@ -30,14 +33,16 @@ $(EXEC): $(OBJECTS)
 # $< holds the input-file's name/name of the dependency of the rule (%c)
 	$(CXX) $(CXX_FLAGS) $@ $<
 
-%.c: %.l
-	lex $< $@
+%.yy.c: %.l
+	lex -o $@ $<
 
-clean: clean_objects clean_exec
+clean: clean_lexed clean_objects clean_exec
 clean_objects:
 	rm -f $(OBJECTS)
 clean_exec:
 	rm -f $(EXEC)
+clean_lexed:
+	rm -f $(LEXED_FILES)
 
 # declare the following targets as phony, as they will not generate files of the same name.
-.PHONY: clean clean_exec clean_objects
+.PHONY: clean clean_exec clean_objects clean_lexed
