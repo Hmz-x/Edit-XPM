@@ -27,11 +27,10 @@ void show_usage();
 
 struct options {
 
+    bool pixel_filter_applied;
     bool convert_enabled;
-
     char * stdin_file;
     char * stdout_file;
-
     int stdin_filter_count;
     char * stdin_filters_arr[];
 
@@ -104,7 +103,10 @@ accesses_struct_element(char * yytext, int mode){
         my_options.convert_enabled = true;
     }
     else{
-        
+        if (strncmp(yytext, "--flp", strlen("--flp")) == 0){
+            my_options.pixel_filter_applied = true;
+        }
+
         my_options.stdin_filters_arr[my_options.stdin_filter_count] = malloc(DEF_MEM);
         my_options.stdin_filters_arr[my_options.stdin_filter_count][0] = 0;
 
@@ -139,23 +141,25 @@ check_for_errors(char * yytext, int mode){
 
     // <filename>
     if (mode == INFILE_MODE){
-        
+
+        FILE * fp = fopen(yytext, "r");
+        if (!fp) {
+            fprintf(stderr, "File %s doesn't exist or is invalid input/option.\n", yytext);
+            show_usage();
+        }
+        fclose(fp);
+
         // check if filename has extension
         if (strstr(yytext, ".") == NULL){
             fprintf(stderr, "Input filename must contain an extension.\n");
             show_usage();
         }
 
-        FILE * fp = fopen(yytext, "r");
-        if (!fp) {
-
-            show_usage();
-        }
-        fclose(fp);
-
         stdin_file_count++;
+        //invalid input or filename entered multiple times
         if (stdin_file_count > 1){
-            fprintf(stderr, "Only one file can be processed at a time.\n");
+            fprintf(stderr, "Invalid input/option or attempt at accessing multiple files." \
+            " Only one file can be accessed at a time.\n");
             show_usage();
         }
     }
@@ -188,19 +192,17 @@ check_for_errors(char * yytext, int mode){
 void
 show_usage(){
     fprintf(stderr, "\nusage: %s [OPTION] <FILE> <FILTER...> - Written by Hamza Kerem Mumcu (hamzamusic34@gmail.com)\n", PRG_NAME);
-    fprintf(stderr, "Temporarily run program such as: ./%s --inv=100 <xpm_file>\n", PRG_NAME);
-    /*
+    
     fprintf(stderr, "-c: convert image file to .xpm format using \'convert\'\n");
     fprintf(stderr, "<FILE>: image file to be processed\n");
     fprintf(stderr, "<FILTER>: filter to apply to image (can use multiple back to back)\n");
-    fprintf(stderr, "Available filters: \'--inv\' (inverted colors), \'--bw\' (black and white)\n");
+    fprintf(stderr, "Available filters: \'--inv=<range>\' (inverted colors, range: 0-100), \'--sat=<range>\' (saturate, range:-100-100),\n");
+    fprintf(stderr, "\'--flp=<side>\' (flip given side, side: t/b for top/bottom).\n");
     fprintf(stderr, "Filters can be chained back to back in order to apply processing one after the other.\n\n");
 
     fprintf(stderr, "Example usage:\n");
-    fprintf(stderr, "%s --baw img.xpm                       # Apply black and white filter to xpm image file\n", PRG_NAME);
-    fprintf(stderr, "%s -c --inv --shd img.jpg              # Convert image to xpm, then apply inversion and shade filter\n", PRG_NAME);
-    fprintf(stderr, "%s img.png -c --shd --baw --inv --sat  # Convert image to xpm, then apply given filters\n\n", PRG_NAME);
-    */
+    fprintf(stderr, "%s --flp=t img.xpm                       # Flip top half of xpm image file\n", PRG_NAME);
+    fprintf(stderr, "%s -c --inv=20 --sat=5 img.jpg           # Convert image to xpm, then apply inversion and saturation filter\n", PRG_NAME);
     exit(1);
 }
 

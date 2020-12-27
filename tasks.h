@@ -11,7 +11,7 @@ update_image_filename_to_write(char * image_filename_to_write){
     char * temp_str_filtername = (char *)malloc(DEF_MEM);
     temp_str_filtername[0] = 0;
     int i = 2, j = 0;
-
+    
     //get filtername
     while (i < 5){
         temp_str_filtername[j++] = my_options.stdin_filters_arr[my_options.stdin_filter_count-1][i];
@@ -131,4 +131,25 @@ remove_hash(char * full_lexed_color_str){
     free(temp_str);
 
     return full_lexed_color_str;
+}
+
+bool
+check_extension(char * filename, char * extension){
+
+    int extension_char_count = strlen(extension);
+    int i = 0, j = 0, met_extension_char_count;
+    bool extension_met = true;
+
+    while (filename[i] != '\0'){
+        
+        if (i >= strlen(filename) - extension_char_count){
+            if (filename[i] != extension[j]){
+                extension_met = false;
+            }
+            j++;
+        }
+        i++;
+    }
+
+    return extension_met;
 }

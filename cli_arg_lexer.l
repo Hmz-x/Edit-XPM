@@ -20,6 +20,8 @@ filename .+
 "--inv="([0-9]|[1-9][0-9]|100)     { accesses_struct_element(yytext, STDIN_FILTERS_MODE); }
 "--sat="(-?)([0-9]|[1-9][0-9]|100) { accesses_struct_element(yytext, STDIN_FILTERS_MODE); }
 "--shd="(-?)([0-9]|[1-9][0-9]|100) { accesses_struct_element(yytext, STDIN_FILTERS_MODE); }
+"--swp="[rgb]{3}                   { accesses_struct_element(yytext, STDIN_FILTERS_MODE); } 
+"--flp="[tblr]                     { accesses_struct_element(yytext, STDIN_FILTERS_MODE); }
 
 -c                               { check_for_errors(yytext, CONVERT_ENABLED_MODE); accesses_struct_element(yytext, CONVERT_ENABLED_MODE); }
 -o=.+                            { check_for_errors(yytext, OUTFILE_MODE); accesses_struct_element(yytext, OUTFILE_MODE); }

@@ -1,5 +1,4 @@
 
-
 int *
 divide_into_tokens(char * buffer, int * image_metadata_ptr){
 
@@ -101,7 +100,6 @@ read_rgb_from_file(char * buffer, int rgb_char_length){
         if (i > 2 + rgb_char_length){
             full_lexed_color_str[j++] = semi_lexed_str[i];
         }
-
         i++;
     }
     full_lexed_color_str[j] = '\0';
