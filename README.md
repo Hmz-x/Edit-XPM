@@ -5,9 +5,10 @@ Written by Hamza Kerem Mumcu (hamzamusic34@gmail.com)
 
 ## Compiling
 
-Using the make build tool you can easily compile the project by typing:
+The make build tool is currently not working properly, thus you must compile it manually:
 
-    $ make
+    $ lex cli_arg_lexer.l
+    $ gcc lex.yy.c edit_xpm.c  # the order matters
 
 ## Usage
     
